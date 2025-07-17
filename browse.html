@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Equipment - Farm Rental</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f59e0b' fill-opacity='0.05'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20m0-60c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20m60 0c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20m0 60c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .wheat-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23f59e0b' opacity='0.1'%3E%3Cpath d='M12 2L9 7h6l-3-5zM12 22l3-5H9l3 5zM5 12l-3 5h6l-3-5zM19 12l3 5h-6l3-5z'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-amber-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-amber-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button onclick="window.location.href='index.html'" class="flex items-center space-x-2 px-3 py-2 text-amber-700 hover:text-amber-800 hover:bg-amber-50 rounded-lg transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        <span class="font-medium">Back to Home</span>
+                    </button>
+                    <div class="flex items-center space-x-2">
+                        <div class="text-2xl">🌾</div>
+                        <h1 class="text-2xl font-bold text-amber-800">AgroRent</h1>
+                    </div>
+                </div>
+                <div class="text-sm text-amber-600 font-medium">Browse & Rent Equipment</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Title Section -->
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">Available Equipment</h2>
+            <p class="text-gray-600">Browse and rent agricultural equipment from local farmers</p>
+        </div>
+
+        <!-- Equipment Grid -->
+        <div id="equipment-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Equipment cards will be populated here -->
+        </div>
+
+        <!-- No Equipment Message -->
+        <div id="no-equipment" class="hidden text-center py-16">
+            <div class="text-6xl mb-4">🚜</div>
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">No Equipment Available</h3>
+            <p class="text-gray-500">Check back later for new equipment listings</p>
+        </div>
+
+        <!-- Currently Rented Section -->
+        <div class="mt-16">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Currently Rented</h2>
+                <p class="text-gray-600">Equipment that is currently rented out to farmers</p>
+            </div>
+
+            <!-- Rented Equipment Grid -->
+            <div id="rented-equipment-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Rented equipment cards will be populated here -->
+            </div>
+
+            <!-- No Rented Equipment Message -->
+            <div id="no-rented-equipment" class="hidden text-center py-16">
+                <div class="text-6xl mb-4">📦</div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">No rented equipment currently</h3>
+                <p class="text-gray-500">All equipment is available for rent</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rental Modal -->
+    <div id="rental-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4 transform transition-all">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Rent Equipment</h3>
+            <div id="equipment-details" class="mb-6">
+                <!-- Equipment details will be populated here -->
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Number of days:</label>
+                <input type="number" id="rental-days" min="1" value="1" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+            </div>
+            <div id="cost-display" class="mb-6 p-4 bg-amber-50 rounded-lg">
+                <p class="text-lg font-semibold text-amber-800">Total cost: ₹<span id="total-cost">0</span> for <span id="total-days">1</span> days</p>
+            </div>
+            <div class="flex space-x-3">
+                <button id="cancel-rental" class="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+                <button id="confirm-rental" class="flex-1 px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-md hover:from-amber-600 hover:to-amber-700 transition-all transform hover:scale-105">
+                    Confirm & Pay
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="success-message" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform z-50">
+        <div class="flex items-center space-x-2">
+            <span class="text-xl">✅</span>
+            <span id="success-text">Rented successfully!</span>
+        </div>
+    </div>
+
+    <script>
+        let machines = [];
+        let currentMachine = null;
+
+        // Initialize sample data if localStorage is empty
+        function initializeSampleData() {
+            const sampleMachines = [
+                {
+                    name: "Tractor",
+                    description: "Heavy-duty tractor perfect for plowing and cultivation. 85 HP engine with modern features.",
+                    price: 1200,
+                    location: "Nashik, Maharashtra",
+                    image_url: "assets/Tractor.jpg",
+                    available: true
+                },
+                {
+                    name: "Combine Harvester",
+                    description: "Efficient combine harvester for wheat, rice, and other grains. High capacity with modern sorting.",
+                    price: 2500,
+                    location: "Pune, Maharashtra",
+                    image_url: "assets/combine harvester.jpg",
+                    available: true
+                },
+                {
+                    name: "Rotary Tiller",
+                    description: "Powerful rotary tiller for soil preparation. Adjustable depth control and sturdy construction.",
+                    price: 800,
+                    location: "Aurangabad, Maharashtra",
+                    image_url: "assets/Rotary Tiller.jpg",
+                    available: true
+                },
+                {
+                    name: "Seed Drill Machine",
+                    description: "Precision seed drill for efficient planting. Variable seed rate and depth control.",
+                    price: 600,
+                    location: "Nashik, Maharashtra",
+                    image_url: "assets/Seed Drill.jpg",
+                    available: true
+                },
+                {
+                    name: "Irrigation Pump",
+                    description: "High-capacity irrigation pump for large fields. Diesel powered with excellent reliability.",
+                    price: 400,
+                    location: "Satara, Maharashtra",
+                    image_url: "assets/irrigation-pump.jpg",
+                    available: true
+                },
+                {
+                    name: "Sprayer Equipment",
+                    description: "Professional sprayer for pesticides and fertilizers. Adjustable nozzles and large tank capacity.",
+                    price: 350,
+                    location: "Nashik, Maharashtra",
+                    image_url: "assets/sprayer_equipment.jpg",
+                    available: false,
+                    rented_until: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            ];
+            
+            if (!localStorage.getItem('machines')) {
+                localStorage.setItem('machines', JSON.stringify(sampleMachines));
+            }
+        }
+
+        // Load machines from localStorage
+        function loadMachines() {
+            const stored = localStorage.getItem('machines');
+            if (stored) {
+                machines = JSON.parse(stored);
+                // Check for expired rentals
+                const now = new Date();
+                machines.forEach(machine => {
+                    if (machine.rented_until && new Date(machine.rented_until) < now) {
+                        machine.available = true;
+                        delete machine.rented_until;
+                    }
+                });
+                // Save updated machines
+                localStorage.setItem('machines', JSON.stringify(machines));
+            }
+        }
+
+        // Create rented equipment card HTML
+        function createRentedEquipmentCard(machine) {
+            const rentedUntil = new Date(machine.rented_until);
+            const now = new Date();
+            const daysLeft = Math.ceil((rentedUntil - now) / (1000 * 60 * 60 * 24));
+            
+            const returnDate = rentedUntil.toLocaleDateString('en-IN', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+            
+            return `
+                <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 opacity-90">
+                    <div class="h-48 bg-gray-200 overflow-hidden relative">
+                        <img src="${machine.image_url}" alt="${machine.name}" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">RENTED</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">${machine.name}</h3>
+                        <div class="flex items-center text-gray-500 mb-3">
+                            <span class="text-sm">📍 ${machine.location}</span>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">Return Date:</span>
+                                <span class="text-sm font-semibold text-gray-900">${returnDate}</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-700">Status:</span>
+                                <span class="text-sm font-semibold ${daysLeft > 0 ? 'text-red-600' : 'text-green-600'}">
+                                    ${daysLeft > 0 ? `Available again in ${daysLeft} days` : 'Available now'}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="inline-flex items-center px-4 py-2 bg-gray-100 rounded-lg text-gray-600 cursor-not-allowed">
+                                <span class="text-sm font-medium">Currently Unavailable</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Display rented equipment
+        function displayRentedEquipment() {
+            const grid = document.getElementById('rented-equipment-grid');
+            const noRentedEquipment = document.getElementById('no-rented-equipment');
+            
+            const rentedMachines = machines.filter(machine => !machine.available && machine.rented_until);
+            
+            if (rentedMachines.length === 0) {
+                grid.innerHTML = '';
+                noRentedEquipment.classList.remove('hidden');
+                return;
+            }
+            
+            noRentedEquipment.classList.add('hidden');
+            grid.innerHTML = rentedMachines.map(machine => createRentedEquipmentCard(machine)).join('');
+        }
+        function createEquipmentCard(machine, index) {
+            return `
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden border border-gray-200">
+                    <div class="h-48 bg-gray-200 overflow-hidden">
+                        <img src="${machine.image_url}" alt="${machine.name}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">${machine.name}</h3>
+                        <p class="text-gray-600 mb-3 text-sm leading-relaxed">${machine.description}</p>
+                        <div class="flex items-center text-gray-500 mb-2">
+                            <span class="text-sm">📍 ${machine.location}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-2xl font-bold text-amber-600">₹${machine.price}<span class="text-sm font-normal text-gray-500">/day</span></div>
+                            <button onclick="openRentalModal(${index})" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all transform hover:scale-105 font-medium">
+                                Rent Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Display equipment
+        function displayEquipment() {
+            const grid = document.getElementById('equipment-grid');
+            const noEquipment = document.getElementById('no-equipment');
+            
+            const availableMachines = machines.filter(machine => machine.available);
+            
+            if (availableMachines.length === 0) {
+                grid.innerHTML = '';
+                noEquipment.classList.remove('hidden');
+                return;
+            }
+            
+            noEquipment.classList.add('hidden');
+            grid.innerHTML = availableMachines.map((machine, index) => {
+                const originalIndex = machines.findIndex(m => m === machine);
+                return createEquipmentCard(machine, originalIndex);
+            }).join('');
+        }
+
+        // Open rental modal
+        function openRentalModal(index) {
+            currentMachine = machines[index];
+            const modal = document.getElementById('rental-modal');
+            const details = document.getElementById('equipment-details');
+            const daysInput = document.getElementById('rental-days');
+            
+            details.innerHTML = `
+                <div class="flex items-center space-x-3 mb-3">
+                    <img src="${currentMachine.image_url}" alt="${currentMachine.name}" class="w-12 h-12 rounded-lg object-cover">
+                    <div>
+                        <h4 class="font-semibold text-gray-900">${currentMachine.name}</h4>
+                        <p class="text-sm text-gray-500">₹${currentMachine.price}/day</p>
+                    </div>
+                </div>
+            `;
+            
+            daysInput.value = 1;
+            updateCostDisplay();
+            modal.classList.remove('hidden');
+        }
+
+        // Update cost display
+        function updateCostDisplay() {
+            if (!currentMachine) return;
+            
+            const days = parseInt(document.getElementById('rental-days').value) || 1;
+            const total = currentMachine.price * days;
+            
+            document.getElementById('total-cost').textContent = total;
+            document.getElementById('total-days').textContent = days;
+        }
+
+        // Confirm rental
+        function confirmRental() {
+            if (!currentMachine) return;
+            
+            const days = parseInt(document.getElementById('rental-days').value) || 1;
+            const rentalEndDate = new Date();
+            rentalEndDate.setDate(rentalEndDate.getDate() + days);
+            
+            // Update machine availability
+            const machineIndex = machines.findIndex(m => m.name === currentMachine.name);
+            machines[machineIndex].available = false;
+            machines[machineIndex].rented_until = rentalEndDate.toISOString();
+            
+            // Save to localStorage
+            localStorage.setItem('machines', JSON.stringify(machines));
+            
+            // Close modal
+            document.getElementById('rental-modal').classList.add('hidden');
+            
+            // Show success message
+            const successMessage = document.getElementById('success-message');
+            const successText = document.getElementById('success-text');
+            successText.textContent = `Rented successfully for ${days} days!`;
+            
+            successMessage.classList.remove('translate-x-full');
+            setTimeout(() => {
+                successMessage.classList.add('translate-x-full');
+            }, 3000);
+            
+            // Refresh display
+            displayEquipment();
+            displayRentedEquipment();
+            currentMachine = null;
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('rental-modal').classList.add('hidden');
+            currentMachine = null;
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSampleData();
+            loadMachines();
+            displayEquipment();
+            displayRentedEquipment();
+            
+            // Event listeners
+            document.getElementById('rental-days').addEventListener('input', updateCostDisplay);
+            document.getElementById('cancel-rental').addEventListener('click', closeModal);
+            document.getElementById('confirm-rental').addEventListener('click', confirmRental);
+            
+            // Close modal when clicking outside
+            document.getElementById('rental-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
