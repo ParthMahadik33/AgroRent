@@ -119,6 +119,72 @@
             color: #374151;
             font-weight: 600;
         }
+
+        .back-to-home {
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 1000;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.8rem 1.4rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            color: #2d5016;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 8px 32px rgba(45, 80, 22, 0.12);
+            border: 1px solid rgba(56, 161, 105, 0.2);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            background: linear-gradient(135deg, #38a169 0%, #2d5016 100%);
+            color: white;
+            box-shadow: 0 15px 40px rgba(45, 80, 22, 0.25);
+            border-color: transparent;
+        }
+
+        .back-btn:active {
+            transform: translateY(-1px) scale(1);
+        }
+
+        .back-btn svg {
+            transition: transform 0.3s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: translateX(-2px);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .back-to-home {
+                top: 1rem;
+                left: 1rem;
+            }
+            
+            .back-btn {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.85rem;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .back-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen wheat-bg bg-gradient-to-br from-green-50 via-yellow-50 to-green-50 relative">
@@ -128,6 +194,17 @@
     <div class="floating-wheat" style="bottom: 35%; left: 20%; animation-delay: 3s;">🌱</div>
     <div class="floating-wheat" style="top: 65%; right: 25%; animation-delay: 4.5s;">🌾</div>
     <div class="floating-wheat" style="bottom: 25%; right: 10%; animation-delay: 6s;">🚜</div>
+    
+    <!-- Back to Home Button -->
+    <div class="back-to-home">
+        <a href="index.html" class="back-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5"/>
+                <path d="m12 19-7-7 7-7"/>
+            </svg>
+            Home
+        </a>
+    </div>
     
     <!-- Navigation Bar -->
     <nav class="navbar fixed top-0 left-0 right-0 z-50 px-6 py-4">
@@ -252,129 +329,135 @@
     </div>
     
     <script>
-        // In-memory storage for demonstration (localStorage not supported in Claude artifacts)
-        let machines = [];
-        
+        // Initialize sample data if needed
+        function initializeSampleData() {
+            const sampleMachines = [
+                {
+                    name: "Tractor",
+                    description: "Heavy-duty tractor perfect for plowing and cultivation. 85 HP engine with modern features.",
+                    price: 1200,
+                    location: "Nashik, Maharashtra",
+                    image_url: "assets/Tractor.jpg",
+                    available: true,
+                    id: Date.now() - 6000000
+                },
+                {
+                    name: "Combine Harvester",
+                    description: "Efficient combine harvester for wheat, rice, and other grains. High capacity with modern sorting.",
+                    price: 2500,
+                    location: "Pune, Maharashtra",
+                    image_url: "assets/combine harvester.jpg",
+                    available: true,
+                    id: Date.now() - 5000000
+                },
+                {
+                    name: "Rotary Tiller",
+                    description: "Powerful rotary tiller for soil preparation. Adjustable depth control and sturdy construction.",
+                    price: 800,
+                    location: "Aurangabad, Maharashtra",
+                    image_url: "assets/Rotary Tiller.jpg",
+                    available: true,
+                    id: Date.now() - 4000000
+                },
+                {
+                    name: "Seed Drill Machine",
+                    description: "Precision seed drill for efficient planting. Variable seed rate and depth control.",
+                    price: 600,
+                    location: "Nashik, Maharashtra",
+                    image_url: "assets/Seed Drill.jpg",
+                    available: true,
+                    id: Date.now() - 3000000
+                },
+                {
+                    name: "Irrigation Pump",
+                    description: "High-capacity irrigation pump for large fields. Diesel powered with excellent reliability.",
+                    price: 400,
+                    location: "Satara, Maharashtra",
+                    image_url: "assets/irrigation-pump.jpg",
+                    available: true,
+                    id: Date.now() - 2000000
+                },
+                {
+                    name: "Sprayer Equipment",
+                    description: "Professional sprayer for pesticides and fertilizers. Adjustable nozzles and large tank capacity.",
+                    price: 350,
+                    location: "Nashik, Maharashtra",
+                    image_url: "assets/sprayer_equipment.jpg",
+                    available: false,
+                    rented_until: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+                    id: Date.now() - 1000000
+                }
+            ];
+            
+            // Only initialize if localStorage is empty or doesn't exist
+            if (!localStorage.getItem('machines')) {
+                localStorage.setItem('machines', JSON.stringify(sampleMachines));
+            }
+        }
+
         document.getElementById('equipmentForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // Initialize sample data first (if needed)
+            initializeSampleData();
             
             // Get form data
             const formData = new FormData(this);
             const machineData = {
                 id: Date.now(), // Simple ID generation
-                equipmentName: formData.get('equipmentName'),
-                imageUrl: formData.get('imageUrl'),
+                name: formData.get('equipmentName'),
+                image_url: formData.get('imageUrl'),
                 description: formData.get('description'),
-                pricePerDay: parseInt(formData.get('pricePerDay')),
+                price: parseInt(formData.get('pricePerDay')),
                 location: formData.get('location'),
+                available: true,
                 dateAdded: new Date().toISOString()
             };
             
-            // Add to machines array (simulating localStorage)
-            machines.push(machineData);
+            // Get existing machines from localStorage
+            let existingMachines = [];
+            try {
+                const stored = localStorage.getItem('machines');
+                existingMachines = stored ? JSON.parse(stored) : [];
+            } catch (error) {
+                console.error('Error reading from localStorage:', error);
+                existingMachines = [];
+            }
             
-            // For actual implementation, you would use:
-            // let existingMachines = JSON.parse(localStorage.getItem('machines') || '[]');
-            // existingMachines.push(machineData);
-            // localStorage.setItem('machines', JSON.stringify(existingMachines));
+            // Add new machine to the array
+            existingMachines.push(machineData);
             
-            console.log('Machine added:', machineData);
-            console.log('All machines:', machines);
-            
-            // Clear form
-            this.reset();
-            
-            // Show success message
-            const successMessage = document.getElementById('successMessage');
-            successMessage.classList.remove('hidden');
-            
-            // Hide success message after 3 seconds
-            setTimeout(() => {
-                successMessage.classList.add('hidden');
-            }, 3000);
-            
-            // Scroll to top to show success message
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Save back to localStorage
+            try {
+                localStorage.setItem('machines', JSON.stringify(existingMachines));
+                console.log('Machine added successfully:', machineData);
+                console.log('Total machines now:', existingMachines.length);
+                
+                // Clear form
+                this.reset();
+                
+                // Show success message
+                const successMessage = document.getElementById('successMessage');
+                successMessage.classList.remove('hidden');
+                
+                // Hide success message after 3 seconds
+                setTimeout(() => {
+                    successMessage.classList.add('hidden');
+                }, 3000);
+                
+                // Scroll to top to show success message
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+            } catch (error) {
+                console.error('Error saving to localStorage:', error);
+                alert('Error saving equipment. Please try again.');
+            }
+        });
+
+        // Initialize sample data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSampleData();
         });
     </script>
-  <!-- CSS to add to your <style> section -->
-<style>
-.back-to-home {
-    position: fixed;
-    top: 1.5rem;
-    left: 1.5rem;
-    z-index: 1000;
-}
-
-.back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.8rem 1.4rem;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(15px);
-    color: #2d5016;
-    text-decoration: none;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    box-shadow: 0 8px 32px rgba(45, 80, 22, 0.12);
-    border: 1px solid rgba(56, 161, 105, 0.2);
-}
-
-.back-btn:hover {
-    transform: translateY(-3px) scale(1.02);
-    background: linear-gradient(135deg, #38a169 0%, #2d5016 100%);
-    color: white;
-    box-shadow: 0 15px 40px rgba(45, 80, 22, 0.25);
-    border-color: transparent;
-}
-
-.back-btn:active {
-    transform: translateY(-1px) scale(1);
-}
-
-.back-btn svg {
-    transition: transform 0.3s ease;
-}
-
-.back-btn:hover svg {
-    transform: translateX(-2px);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .back-to-home {
-        top: 1rem;
-        left: 1rem;
-    }
-    
-    .back-btn {
-        padding: 0.7rem 1.2rem;
-        font-size: 0.85rem;
-        gap: 0.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .back-btn {
-        padding: 0.6rem 1rem;
-        font-size: 0.8rem;
-    }
-}
-</style>
-
-<!-- HTML to add right after the opening <body> tag -->
-<div class="back-to-home">
-    <a href="index.html" class="back-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 12H5"/>
-            <path d="m12 19-7-7 7-7"/>
-        </svg>
-        Home
-    </a>
-</div>
 </body>
 </html>
