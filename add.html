@@ -133,7 +133,7 @@
     <nav class="navbar fixed top-0 left-0 right-0 z-50 px-6 py-4">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <!-- Logo -->
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-2 pl-4">
                 <span class="text-2xl">🌾</span>
                 <span class="text-xl font-bold text-gray-800">AgroRent</span>
             </div>
@@ -297,5 +297,84 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     </script>
+  <!-- CSS to add to your <style> section -->
+<style>
+.back-to-home {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 1000;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1.4rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    color: #2d5016;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 8px 32px rgba(45, 80, 22, 0.12);
+    border: 1px solid rgba(56, 161, 105, 0.2);
+}
+
+.back-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    background: linear-gradient(135deg, #38a169 0%, #2d5016 100%);
+    color: white;
+    box-shadow: 0 15px 40px rgba(45, 80, 22, 0.25);
+    border-color: transparent;
+}
+
+.back-btn:active {
+    transform: translateY(-1px) scale(1);
+}
+
+.back-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.back-btn:hover svg {
+    transform: translateX(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .back-to-home {
+        top: 1rem;
+        left: 1rem;
+    }
+    
+    .back-btn {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.85rem;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+</style>
+
+<!-- HTML to add right after the opening <body> tag -->
+<div class="back-to-home">
+    <a href="index.html" class="back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5"/>
+            <path d="m12 19-7-7 7-7"/>
+        </svg>
+        Home
+    </a>
+</div>
 </body>
 </html>

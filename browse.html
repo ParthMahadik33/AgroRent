@@ -14,6 +14,14 @@
         .wheat-pattern {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23f59e0b' opacity='0.1'%3E%3Cpath d='M12 2L9 7h6l-3-5zM12 22l3-5H9l3 5zM5 12l-3 5h6l-3-5zM19 12l3 5h-6l3-5z'/%3E%3C/svg%3E");
         }
+        .filter-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .filter-dropdown.open {
+            max-height: 300px;
+        }
     </style>
 </head>
 <body class="bg-amber-50 min-h-screen">
@@ -46,6 +54,103 @@
             <p class="text-gray-600">Browse and rent agricultural equipment from local farmers</p>
         </div>
 
+        <!-- Search and Filter Bar -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8 border border-gray-200">
+            <!-- Search Bar -->
+            <div class="mb-4">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="search-input" placeholder="Search equipment by name or description..." 
+                           class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-gray-900 placeholder-gray-500">
+                </div>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="flex flex-wrap items-center gap-4">
+                <!-- Location Filter -->
+                <div class="relative">
+                    <button id="location-filter-btn" class="flex items-center space-x-2 px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <span class="text-gray-700">📍 Location</span>
+                        <svg class="w-4 h-4 text-gray-500 transform transition-transform" id="location-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div id="location-filter-dropdown" class="filter-dropdown absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                        <div class="p-3">
+                            <div class="space-y-2" id="location-options">
+                                <!-- Location options will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Range Filter -->
+                <div class="relative">
+                    <button id="price-filter-btn" class="flex items-center space-x-2 px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <span class="text-gray-700">💰 Price Range</span>
+                        <svg class="w-4 h-4 text-gray-500 transform transition-transform" id="price-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div id="price-filter-dropdown" class="filter-dropdown absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                        <div class="p-4">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Price per day (₹)</label>
+                                <div class="flex items-center space-x-3">
+                                    <input type="number" id="min-price" placeholder="Min" class="w-20 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-amber-500">
+                                    <span class="text-gray-500">-</span>
+                                    <input type="number" id="max-price" placeholder="Max" class="w-20 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-amber-500">
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="radio" name="price-range" value="0-500" class="text-amber-500 focus:ring-amber-500">
+                                    <span class="ml-2 text-sm text-gray-700">₹0 - ₹500</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="price-range" value="500-1000" class="text-amber-500 focus:ring-amber-500">
+                                    <span class="ml-2 text-sm text-gray-700">₹500 - ₹1000</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="price-range" value="1000-2000" class="text-amber-500 focus:ring-amber-500">
+                                    <span class="ml-2 text-sm text-gray-700">₹1000 - ₹2000</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="price-range" value="2000+" class="text-amber-500 focus:ring-amber-500">
+                                    <span class="ml-2 text-sm text-gray-700">₹2000+</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sort Options -->
+                <div class="relative">
+                    <select id="sort-select" class="px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-700">
+                        <option value="">Sort by</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name-asc">Name: A to Z</option>
+                        <option value="name-desc">Name: Z to A</option>
+                    </select>
+                </div>
+
+                <!-- Clear Filters Button -->
+                <button id="clear-filters" class="px-4 py-2 text-amber-700 hover:text-amber-800 hover:bg-amber-50 border border-amber-300 rounded-lg transition-colors">
+                    Clear Filters
+                </button>
+
+                <!-- Results Count -->
+                <div class="ml-auto">
+                    <span id="results-count" class="text-sm text-gray-600 font-medium">Showing all equipment</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Equipment Grid -->
         <div id="equipment-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Equipment cards will be populated here -->
@@ -54,8 +159,8 @@
         <!-- No Equipment Message -->
         <div id="no-equipment" class="hidden text-center py-16">
             <div class="text-6xl mb-4">🚜</div>
-            <h3 class="text-xl font-semibold text-gray-700 mb-2">No Equipment Available</h3>
-            <p class="text-gray-500">Check back later for new equipment listings</p>
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">No Equipment Found</h3>
+            <p class="text-gray-500">Try adjusting your search or filter criteria</p>
         </div>
 
         <!-- Currently Rented Section -->
@@ -114,7 +219,16 @@
 
     <script>
         let machines = [];
+        let filteredMachines = [];
         let currentMachine = null;
+        let currentFilters = {
+            search: '',
+            location: '',
+            minPrice: '',
+            maxPrice: '',
+            priceRange: '',
+            sort: ''
+        };
 
         // Initialize sample data if localStorage is empty
         function initializeSampleData() {
@@ -193,7 +307,180 @@
             }
         }
 
-        // Create rented equipment card HTML
+        // Filter and search functions
+        function applyFilters() {
+            let filtered = machines.filter(machine => machine.available);
+
+            // Apply search filter
+            if (currentFilters.search) {
+                const searchTerm = currentFilters.search.toLowerCase();
+                filtered = filtered.filter(machine => 
+                    machine.name.toLowerCase().includes(searchTerm) ||
+                    machine.description.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Apply location filter
+            if (currentFilters.location) {
+                filtered = filtered.filter(machine => 
+                    machine.location === currentFilters.location
+                );
+            }
+
+            // Apply price filters
+            if (currentFilters.minPrice || currentFilters.maxPrice) {
+                const min = parseFloat(currentFilters.minPrice) || 0;
+                const max = parseFloat(currentFilters.maxPrice) || Infinity;
+                filtered = filtered.filter(machine => 
+                    machine.price >= min && machine.price <= max
+                );
+            } else if (currentFilters.priceRange) {
+                const [minStr, maxStr] = currentFilters.priceRange.split('-');
+                const min = parseFloat(minStr) || 0;
+                const max = maxStr === '+' ? Infinity : parseFloat(maxStr) || Infinity;
+                filtered = filtered.filter(machine => 
+                    machine.price >= min && (max === Infinity || machine.price <= max)
+                );
+            }
+
+            // Apply sorting
+            if (currentFilters.sort) {
+                switch (currentFilters.sort) {
+                    case 'price-low':
+                        filtered.sort((a, b) => a.price - b.price);
+                        break;
+                    case 'price-high':
+                        filtered.sort((a, b) => b.price - a.price);
+                        break;
+                    case 'name-asc':
+                        filtered.sort((a, b) => a.name.localeCompare(b.name));
+                        break;
+                    case 'name-desc':
+                        filtered.sort((a, b) => b.name.localeCompare(a.name));
+                        break;
+                }
+            }
+
+            filteredMachines = filtered;
+            displayEquipment();
+            updateResultsCount();
+        }
+
+        // Update results count
+        function updateResultsCount() {
+            const count = filteredMachines.length;
+            const countElement = document.getElementById('results-count');
+            
+            if (count === 0) {
+                countElement.textContent = 'No equipment found';
+            } else if (count === 1) {
+                countElement.textContent = 'Showing 1 equipment';
+            } else {
+                countElement.textContent = `Showing ${count} equipment`;
+            }
+        }
+
+        // Populate location filter options
+        function populateLocationFilter() {
+            const locations = [...new Set(machines.map(machine => machine.location))];
+            const container = document.getElementById('location-options');
+            
+            container.innerHTML = locations.map(location => `
+                <label class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded">
+                    <input type="radio" name="location-filter" value="${location}" class="text-amber-500 focus:ring-amber-500">
+                    <span class="ml-2 text-sm text-gray-700">${location}</span>
+                </label>
+            `).join('');
+
+            // Add "All locations" option
+            container.insertAdjacentHTML('afterbegin', `
+                <label class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded">
+                    <input type="radio" name="location-filter" value="" class="text-amber-500 focus:ring-amber-500" checked>
+                    <span class="ml-2 text-sm text-gray-700 font-medium">All locations</span>
+                </label>
+            `);
+
+            // Add event listeners
+            container.querySelectorAll('input[name="location-filter"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    currentFilters.location = e.target.value;
+                    applyFilters();
+                });
+            });
+        }
+
+        // Toggle dropdown
+        function toggleDropdown(dropdownId, arrowId) {
+            const dropdown = document.getElementById(dropdownId);
+            const arrow = document.getElementById(arrowId);
+            const isOpen = dropdown.classList.contains('open');
+            
+            // Close all dropdowns first
+            document.querySelectorAll('.filter-dropdown').forEach(d => d.classList.remove('open'));
+            document.querySelectorAll('.filter-dropdown').forEach((d, i) => {
+                const arrows = ['location-arrow', 'price-arrow'];
+                if (arrows[i]) document.getElementById(arrows[i]).style.transform = 'rotate(0deg)';
+            });
+            
+            if (!isOpen) {
+                dropdown.classList.add('open');
+                arrow.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Clear all filters
+        function clearFilters() {
+            currentFilters = {
+                search: '',
+                location: '',
+                minPrice: '',
+                maxPrice: '',
+                priceRange: '',
+                sort: ''
+            };
+            
+            // Reset form elements
+            document.getElementById('search-input').value = '';
+            document.getElementById('min-price').value = '';
+            document.getElementById('max-price').value = '';
+            document.getElementById('sort-select').value = '';
+            
+            // Reset radio buttons
+            document.querySelectorAll('input[name="location-filter"]').forEach(radio => {
+                radio.checked = radio.value === '';
+            });
+            document.querySelectorAll('input[name="price-range"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            applyFilters();
+        }
+
+        // Create equipment card (same as before)
+        function createEquipmentCard(machine, index) {
+            return `
+                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden border border-gray-200">
+                    <div class="h-48 bg-gray-200 overflow-hidden">
+                        <img src="${machine.image_url}" alt="${machine.name}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">${machine.name}</h3>
+                        <p class="text-gray-600 mb-3 text-sm leading-relaxed">${machine.description}</p>
+                        <div class="flex items-center text-gray-500 mb-2">
+                            <span class="text-sm">📍 ${machine.location}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-2xl font-bold text-amber-600">₹${machine.price}<span class="text-sm font-normal text-gray-500">/day</span></div>
+                            <button onclick="openRentalModal(${index})" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all transform hover:scale-105 font-medium">
+                                Rent Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Create rented equipment card (same as before)
         function createRentedEquipmentCard(machine) {
             const rentedUntil = new Date(machine.rented_until);
             const now = new Date();
@@ -240,7 +527,25 @@
             `;
         }
 
-        // Display rented equipment
+        // Display equipment (updated to use filtered machines)
+        function displayEquipment() {
+            const grid = document.getElementById('equipment-grid');
+            const noEquipment = document.getElementById('no-equipment');
+            
+            if (filteredMachines.length === 0) {
+                grid.innerHTML = '';
+                noEquipment.classList.remove('hidden');
+                return;
+            }
+            
+            noEquipment.classList.add('hidden');
+            grid.innerHTML = filteredMachines.map((machine, index) => {
+                const originalIndex = machines.findIndex(m => m === machine);
+                return createEquipmentCard(machine, originalIndex);
+            }).join('');
+        }
+
+        // Display rented equipment (same as before)
         function displayRentedEquipment() {
             const grid = document.getElementById('rented-equipment-grid');
             const noRentedEquipment = document.getElementById('no-rented-equipment');
@@ -256,50 +561,8 @@
             noRentedEquipment.classList.add('hidden');
             grid.innerHTML = rentedMachines.map(machine => createRentedEquipmentCard(machine)).join('');
         }
-        function createEquipmentCard(machine, index) {
-            return `
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden border border-gray-200">
-                    <div class="h-48 bg-gray-200 overflow-hidden">
-                        <img src="${machine.image_url}" alt="${machine.name}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">${machine.name}</h3>
-                        <p class="text-gray-600 mb-3 text-sm leading-relaxed">${machine.description}</p>
-                        <div class="flex items-center text-gray-500 mb-2">
-                            <span class="text-sm">📍 ${machine.location}</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="text-2xl font-bold text-amber-600">₹${machine.price}<span class="text-sm font-normal text-gray-500">/day</span></div>
-                            <button onclick="openRentalModal(${index})" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all transform hover:scale-105 font-medium">
-                                Rent Now
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
 
-        // Display equipment
-        function displayEquipment() {
-            const grid = document.getElementById('equipment-grid');
-            const noEquipment = document.getElementById('no-equipment');
-            
-            const availableMachines = machines.filter(machine => machine.available);
-            
-            if (availableMachines.length === 0) {
-                grid.innerHTML = '';
-                noEquipment.classList.remove('hidden');
-                return;
-            }
-            
-            noEquipment.classList.add('hidden');
-            grid.innerHTML = availableMachines.map((machine, index) => {
-                const originalIndex = machines.findIndex(m => m === machine);
-                return createEquipmentCard(machine, originalIndex);
-            }).join('');
-        }
-
-        // Open rental modal
+        // Open rental modal (same as before)
         function openRentalModal(index) {
             currentMachine = machines[index];
             const modal = document.getElementById('rental-modal');
@@ -321,7 +584,7 @@
             modal.classList.remove('hidden');
         }
 
-        // Update cost display
+        // Update cost display (same as before)
         function updateCostDisplay() {
             if (!currentMachine) return;
             
@@ -332,7 +595,7 @@
             document.getElementById('total-days').textContent = days;
         }
 
-        // Confirm rental
+        // Confirm rental (same as before)
         function confirmRental() {
             if (!currentMachine) return;
             
@@ -362,12 +625,12 @@
             }, 3000);
             
             // Refresh display
-            displayEquipment();
+            applyFilters(); // Use applyFilters instead of displayEquipment
             displayRentedEquipment();
             currentMachine = null;
         }
 
-        // Close modal
+        // Close modal (same as before)
         function closeModal() {
             document.getElementById('rental-modal').classList.add('hidden');
             currentMachine = null;
@@ -377,10 +640,65 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeSampleData();
             loadMachines();
-            displayEquipment();
+            populateLocationFilter();
+            applyFilters(); // Use applyFilters instead of displayEquipment
             displayRentedEquipment();
             
-            // Event listeners
+            // Search input event listener
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                currentFilters.search = e.target.value;
+                applyFilters();
+            });
+
+            // Location filter dropdown toggle
+            document.getElementById('location-filter-btn').addEventListener('click', () => {
+                toggleDropdown('location-filter-dropdown', 'location-arrow');
+            });
+
+            // Price filter dropdown toggle
+            document.getElementById('price-filter-btn').addEventListener('click', () => {
+                toggleDropdown('price-filter-dropdown', 'price-arrow');
+            });
+
+            // Price range inputs
+            document.getElementById('min-price').addEventListener('input', (e) => {
+                currentFilters.minPrice = e.target.value;
+                currentFilters.priceRange = ''; // Clear preset range
+                document.querySelectorAll('input[name="price-range"]').forEach(radio => radio.checked = false);
+                applyFilters();
+            });
+
+            document.getElementById('max-price').addEventListener('input', (e) => {
+                currentFilters.maxPrice = e.target.value;
+                currentFilters.priceRange = ''; // Clear preset range
+                document.querySelectorAll('input[name="price-range"]').forEach(radio => radio.checked = false);
+                applyFilters();
+            });
+
+            // Price range radio buttons
+            document.querySelectorAll('input[name="price-range"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        currentFilters.priceRange = e.target.value;
+                        currentFilters.minPrice = '';
+                        currentFilters.maxPrice = '';
+                        document.getElementById('min-price').value = '';
+                        document.getElementById('max-price').value = '';
+                        applyFilters();
+                    }
+                });
+            });
+
+            // Sort select
+            document.getElementById('sort-select').addEventListener('change', (e) => {
+                currentFilters.sort = e.target.value;
+                applyFilters();
+            });
+
+            // Clear filters button
+            document.getElementById('clear-filters').addEventListener('click', clearFilters);
+            
+            // Other event listeners (same as before)
             document.getElementById('rental-days').addEventListener('input', updateCostDisplay);
             document.getElementById('cancel-rental').addEventListener('click', closeModal);
             document.getElementById('confirm-rental').addEventListener('click', confirmRental);
@@ -389,6 +707,15 @@
             document.getElementById('rental-modal').addEventListener('click', function(e) {
                 if (e.target === this) {
                     closeModal();
+                }
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.relative')) {
+                    document.querySelectorAll('.filter-dropdown').forEach(d => d.classList.remove('open'));
+                    document.getElementById('location-arrow').style.transform = 'rotate(0deg)';
+                    document.getElementById('price-arrow').style.transform = 'rotate(0deg)';
                 }
             });
         });
