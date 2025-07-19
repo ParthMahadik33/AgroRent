@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - AgroRent</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7fff5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    .about-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    h1 {
+      color: #2e7d32;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #388e3c;
+      margin-top: 30px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ul li::before {
+      content: '✅ ';
+      color: #4caf50;
+    }
+
+    .emoji {
+      font-size: 1.3rem;
+      margin-right: 8px;
+    }
+
+    .highlight {
+      color: #00796b;
+      font-weight: 600;
+    }
+
+    .section {
+      margin-top: 25px;
+      padding: 15px;
+      border-left: 4px solid #aed581;
+      background-color: #f1f8e9;
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section:hover {
+      box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
+    }
+
+    /* Scroll to top button */
+    #topBtn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      padding: 10px 15px;
+      font-size: 20px;
+      cursor: pointer;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .about-container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="about-container">
+    <h1>🚜 About AgroRent</h1>
+
+    <p><span class="emoji">🌾</span><strong>AgroRent</strong> is an innovative platform connecting <span class="highlight">farmers</span> with <span class="highlight">equipment owners</span>, making it easy to rent agricultural tools anytime, anywhere in India.</p>
+
+    <p>Our goal is to make farming equipment <span class="highlight">affordable, accessible, and hassle-free</span> by bridging the gap between those who need it and those who have it.</p>
+
+    <div class="section">
+      <h2>🎯 Our Mission</h2>
+      <p>To build a smart, connected agriculture ecosystem by enabling farmers to access modern machinery on demand, while helping owners earn passive income from their tools.</p>
+    </div>
+
+    <div class="section">
+      <h2>🚀 Why AgroRent?</h2>
+      <ul>
+        <li>Rent equipment only when needed 🧑‍🌾</li>
+        <li>No middlemen involved — direct farmer-owner connect 🤝</li>
+        <li>Save ownership & maintenance costs 💰</li>
+        <li>Earn extra income from idle machines 💸</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🔑 Key Features</h2>
+      <ul>
+        <li>🌾 Easy equipment search & booking</li>
+        <li>🗺 Location-based listings</li>
+        <li>💳 Transparent pricing & secure payments</li>
+        <li>💬 24/7 chatbot support for instant help</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🌟 Who We Help</h2>
+      <ul>
+        <li>Small & marginal farmers 👨‍🌾</li>
+        <li>Owners with idle agricultural machines 🚜</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>📈 Future Plans</h2>
+      <ul>
+        <li>📱 Launching mobile app for rural areas</li>
+        <li>📊 Analytics for users (usage, earnings, etc.)</li>
+        <li>🛠 Maintenance reminders for machines</li>
+        <li>🌐 Multi-language support (Marathi, Hindi, etc.)</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>💡 The Impact</h2>
+      <p>AgroRent empowers farmers by making tools accessible and supports equipment owners with new income opportunities — building a stronger, collaborative farming community.</p>
+    </div>
+
+    <p style="text-align:center; font-weight:bold; color:#4caf50;">🌱 Let’s grow together with technology in farming!</p>
+  </div>
+
+  <button id="topBtn" title="Go to top">⬆</button>
+
+  <script>
+    // Scroll animation
+    const sections = document.querySelectorAll('.section');
+    const topBtn = document.getElementById('topBtn');
+
+    function revealOnScroll() {
+      const triggerBottom = window.innerHeight * 0.85;
+      sections.forEach(sec => {
+        const boxTop = sec.getBoundingClientRect().top;
+        if (boxTop < triggerBottom) {
+          sec.classList.add('visible');
+        }
+      });
+
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        topBtn.style.display = "block";
+      } else {
+        topBtn.style.display = "none";
+      }
+    }
+
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+
+    // Scroll to top
+    topBtn.onclick = function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
